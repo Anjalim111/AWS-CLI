@@ -1,0 +1,79 @@
+aws ec2 run-instances --image-id ami-173d747e --count 1 --instance-type t1.micro --key-name MyKeyPair --security-groups my-sg
+
+------------------AWS CLI FOR IAM-------------------
+
+How to create group in IAM using AWS cli
+aws iam create-group --group-name Mygroup
+
+How to create IAM-user in AWS cli?
+aws iam create-user --user-name Myuser
+
+How to add user to the group?
+aws iam add-user-to-group --user-name Myuser --group-name Mygroup
+
+How to check the add information in group?
+aws iam get-group --group-name Mygroup  
+
+How to assigen policy to the user?
+1.create a file
+  cat > Mypolicy.json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "NotAction": "iam:*",
+      "Resource": "*"
+    }
+  ]
+}
+2.Add policy to the user
+aws iam put-user-policy --user-name Myuser --policy-name MyPowerUserRole --policy-document file://Mypolicy.json
+
+
+How to check the added policy of user?
+aws iam list-user-policies --user-name Myuser
+
+How to assign passwd to the user?
+aws iam create-login-profile --user-name Myuser --password 1234
+
+How to create access key to the user?
+aws iam create-access-key --user-name Myuser
+
+
+===========================AWS CLI FOR EC2Instace=======================
+
+How to create key-pair?
+aws ec2 create-key-pair --key-name Mykey --query 'KeyMaterial' --output text > Mykey.pem
+
+How to create security group?
+aws ec2 create-security-group-name Mygroup --description "security group for my instance"
+
+How to add portocol rool to the security group?
+aws ec2 authorize-security-group --group-name Mygroup --protocol tcp --port 3389 --cidr 0.0.0.0/0
+
+How to launch the instance?
+aws ec2 run-instances --image-id ami-173d747e --count 1 --instance-type t2.micro --key-name Mykey --security-groups Mygroup
+
+How to describe the instances?
+aws ec2 describe-instances --query 'Reservations[*],[Instance,State..Name,launchTime,PublicIpAddress]' --output table
+ 
+Hpw to terminate instance?
+aws ec2 terminate-instances --instance-ids <we have to give instance id>
+
+How to crate volume?
+aws ec2 create-volume --volume-type gp2 --size 10 --availability-zone ap-south-1a
+
+
+how to delete volume?
+aws ec2 delete-volume --volume-id <we have to give volume id>
+===============================AWS CLI for S3============================================
+
+How to create an bucket?
+aws s3 mb s3://cloud-rajesh100
+
+How to add files to the bucket?
+aws s3 cp "c:\User\Harsha\Desktop\aws\harsha.txt" s3://cloud-rajesh100
+
+How to download the file from Bucket?
+aws s3 cp s3://cloud-rajesh100/harsha.txt c:/User/Harsha/Desktop/aws
